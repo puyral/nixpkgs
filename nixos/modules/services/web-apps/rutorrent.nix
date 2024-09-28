@@ -25,6 +25,8 @@ in {
     services.rutorrent = {
       enable = mkEnableOption "ruTorrent";
 
+      package = mkPackageOption pkgs "rutorrent" { };
+
       hostName = mkOption {
         type = types.str;
         description = "FQDN for the ruTorrent instance.";
@@ -207,15 +209,15 @@ in {
             wantedBy = [ "multi-user.target" ];
             before = [ "phpfpm-rutorrent.service" ];
             script = ''
-              ln -sf ${pkgs.rutorrent}/{css,images,js,lang,index.html} ${cfg.dataDir}/
+              ln -sf ${cfg.package}/{css,images,js,lang,index.html} ${cfg.dataDir}/
               mkdir -p ${cfg.dataDir}/{conf,logs,plugins} ${cfg.dataDir}/share/{settings,torrents,users}
-              ln -sf ${pkgs.rutorrent}/conf/{access.ini,plugins.ini} ${cfg.dataDir}/conf/
+              ln -sf ${cfg.package}/conf/{access.ini,plugins.ini} ${cfg.dataDir}/conf/
               ln -sf ${rutorrentConfig} ${cfg.dataDir}/conf/config.php
 
-              cp -r ${pkgs.rutorrent}/php ${cfg.dataDir}/
+              cp -r ${cfg.package}/php ${cfg.dataDir}/
 
               ${optionalString (cfg.plugins != [])
-                ''cp -r ${concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins} ${cfg.dataDir}/plugins/''}
+                ''cp -r ${concatMapStringsSep " " (p: "${cfg.package}/plugins/${p}") cfg.plugins} ${cfg.dataDir}/plugins/''}
 
               chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}/{conf,share,logs,plugins}
               chmod -R 755 ${cfg.dataDir}/{conf,share,logs,plugins}
