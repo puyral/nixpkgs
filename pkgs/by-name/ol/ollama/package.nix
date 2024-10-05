@@ -40,13 +40,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-YYrNrlXL6ytLfnrvSHybi0va0lvgVNuIRP+IFE5XZX8=";
+    hash = "sha256-K1FYXEP0bTZa8M+V4/SxI+Q+LWs2rsAMZ/ETJCaO7P8=";
     fetchSubmodules = true;
   };
 
@@ -218,9 +218,7 @@ goBuild {
         service-cuda = nixosTests.ollama-cuda;
         service-rocm = nixosTests.ollama-rocm;
       };
-
-    updateScript = nix-update-script { };
-  };
+  } // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
 
   meta = {
     description =
