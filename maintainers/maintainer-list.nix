@@ -19183,6 +19183,12 @@
     githubId = 8208767;
     name = "Slim Cadoux";
   };
+  puyral = {
+    github = "puyral";
+    githubId = 7871851;
+    email = "github@puyral.fr";
+    keys = [ { fingerprint = "1E96 E80F 8B44 B124 2EB2  645A 2F89 AA82 0629 9121"; } ];
+  };
   puzzlewolf = {
     email = "nixos@nora.pink";
     github = "puzzlewolf";
